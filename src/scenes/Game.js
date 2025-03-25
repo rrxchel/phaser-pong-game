@@ -27,8 +27,13 @@ export class Game extends Scene {
        this.ball.setCollideWorldBounds(true);
        this.ball.setBounce(1,1);
        this.input.keyboard.on("keydown-SPACE", this.startBall, this);
-        this.leftPaddle = this.add.image(50,HEIGHT/2, "paddle");
-        this.rightPaddle = this.add.image(974,HEIGHT/2, "paddle");
+        this.leftPaddle = this.physics.add.image(50,HEIGHT/2, "paddle");
+        this.rightPaddle = this.physics.add.image(974,HEIGHT/2, "paddle");
+       
+       
+       this.physics.add.collider(this.ball,this.leftPaddle, this.hitpaddle, null, this);
+       this.physics.add.collider(this.ball,this.rightPaddle, this.hitpaddle, null, this);
+
         this.cursors = this.input.keyboard.createCursorKeys();
         this.wasd = this.input.keyboard.addKeys(
             {
@@ -36,7 +41,8 @@ export class Game extends Scene {
                 down:Phaser.Input.Keyboard.KeyCodes.S
             }
         );
-
+       this.leftscoreText = this.add.text(100,50,'0', {fontsize : '50px'});
+       this.rightscoreText = this.add.text(924,50,'0', {fontsize : '50px'});
     }
 
     update() {
@@ -54,13 +60,18 @@ export class Game extends Scene {
        if(this.cursors.down.isDown && this.rightPaddle.y <=HEIGHT){
         this.rightPaddle.y +=5;
        }
+       if(this.ball.x > WIDTH - margin){
+
+       }
+       startBall()
+       {
+           if(!this.ballInMotion){
+               this.ball.setVelocity(200,200);
+               this.ballInMotion = true;
+           }
+       }
+   
+   }
 
     }
-    startBall(){
-        if(!this.ballInMotion){
-            this.ball.setVelocity(200,200);
-            this.ballInMotion = true;
-        }
-    }
-
-}
+   
